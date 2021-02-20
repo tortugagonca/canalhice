@@ -15,7 +15,7 @@ namespace Canalhice
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
-            var host = new WebHostBuilder()
+            new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
