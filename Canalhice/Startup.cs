@@ -1,12 +1,12 @@
+using canalhice.api.Helpers;
+using canalhice.services.commands;
+using MediatR;
+using MediatR.Pipeline;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Reflection;
 
 namespace Canalhice
 {
@@ -23,6 +23,14 @@ namespace Canalhice
                 o.ForwardClientCertificate = false;
             });
             services.AddSwaggerGen();
+
+            services.AddMediatR(Assembly.GetExecutingAssembly());
+
+
+            var assemblyCommands = typeof(PrimeiroServicoHandler).Assembly;
+
+            services.AddMediatR(assemblyCommands);
+            services.AddTransient(typeof(IRequestExceptionHandler<,,>), typeof(RequestGenericExceptionHandler<,,>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

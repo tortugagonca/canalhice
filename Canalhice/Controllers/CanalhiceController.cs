@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using canalhice.services.commands;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace canalhice.api.Controllers
@@ -13,6 +10,15 @@ namespace canalhice.api.Controllers
     [ApiController]
     public class CanalhiceController : ControllerBase
     {
+        private readonly IMediator _mediator;
+
+        public CanalhiceController(
+            IMediator mediator
+        )
+        {
+            _mediator = mediator;
+        }
+
         [HttpGet, Route("testandoApi")]
         public string GetTestandoApi()
         {
@@ -20,10 +26,16 @@ namespace canalhice.api.Controllers
 
             return "coé rapaziada";
         }
+
+        /// <summary>
+        /// recebe um texto e inverte o mesmo
+        /// </summary>
+        /// <param name="texto"></param>
+        /// <returns></returns>
         [HttpGet]
-        public string RecebendoDisparando(string texto)
+        public async Task<string> RecebendoDisparando(string texto)
         {
-            return new string(texto.Reverse().ToArray());
+            return await _mediator.Send(new PrimeiroServicoCommand(texto));
         }
     }
 }
