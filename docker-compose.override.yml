@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  canalhice.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - TZ=America/Sao_Paulo
+    build:
+      context: .
+      dockerfile: Canalhice/Dockerfile
+    ports:
+      - "5002:80"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro

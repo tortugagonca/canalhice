@@ -1,0 +1,35 @@
+version: '3.4'
+
+services:
+
+  canalhice.elasticsearch:
+   image: docker.elastic.co/elasticsearch/elasticsearch:7.11.1
+   volumes:
+    - ./esdata:/usr/shar/elasticsearch/data
+   container_name: elasticsearch
+   ports: 
+    - "9321:9321"
+   environment:
+   - bootstarp.memory_lock=true
+   - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+   - discovery.type=single-node
+
+  canalhice.kibana:
+   image: docker.elastic.co/kibana/kibana:7.11.1
+   container_name: kibana
+   ports: 
+    - "5498:5498"
+   depends_on: 
+    - canalhice.elasticsearch
+  dwcgonca.canalhice.api:
+   image: canalhice.api:v1.0.0
+   restart: always
+   environment:
+    - Serilog_WriteTo__1__Args__path=/tmp/canalhice/logs/canalhas_log.txt 
+    - "BaseUrl=https://localhost:91234"
+   depends_on: 
+    - canalhice.kibana
+
+
+volumes:
+ esdata: 
